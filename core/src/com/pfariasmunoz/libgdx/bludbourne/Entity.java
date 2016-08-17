@@ -128,4 +128,45 @@ public class Entity {
         _currentFrame = textureFrames[0][0];
     }
 
+    private void loadAllAnimations() {
+        // Walking animation
+        Texture texture = Utility.getTextureAsset(_defaultSpritePath);
+        TextureRegion[][] textureFrames = TextureRegion.split(texture, FRAME_WIDTH, FRAME_HEIGHT);
+        _walkDownFrames = new Array<TextureRegion>(4);
+        _walkLeftFrames = new Array<TextureRegion>(4);
+        _walkRightFrames = new Array<TextureRegion>(4);
+        _walkUpFrames = new Array<TextureRegion>(4);
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                TextureRegion region = textureFrames[i][j];
+                if (region == null) {
+                    Gdx.app.debug(TAG, "Got null animation frame " + i + ", " + j);
+                }
+                switch (i) {
+                    case 0:
+                        _walkDownFrames.insert(j, region);
+                        break;
+                    case 1;
+                        _walkLeftFrames.insert(j, region);
+                        break;
+                    case 2:
+                        _walkRightFrames.insert(j, region);
+                        break;
+                    case 3:
+                        _walkUpFrames.insert(j, region);
+                        break;
+                }
+            }
+        }
+
+        _walkDownAnimation = new Animation(0.25f, _walkDownFrames, Animation.PlayMode.LOOP);
+        _walkLeftAnimation = new Animation(0.25f, _walkLeftFrames, Animation.PlayMode.LOOP);
+        _walkRightAnimation = new Animation(0.25f, _walkRightFrames, Animation.PlayMode.LOOP);
+        _walkUpAnimation = new Animation(0.25f, _walkUpFrames, Animation.PlayMode.LOOP);
+    }
+
+    public void dispose() {
+        Utility.unloadAsset(_defaultSpritePath);
+    }
 }
