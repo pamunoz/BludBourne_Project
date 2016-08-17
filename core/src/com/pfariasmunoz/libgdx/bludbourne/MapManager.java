@@ -67,4 +67,51 @@ public class MapManager {
 
         _convertedUnits = new Vector2(0, 0);
     }
+
+    public void loadMap(String mapName) {
+        _playerStart.set(0, 0);
+
+        String mapFullPath = _mapTable.get(mapName);
+
+        if (mapFullPath == null || mapFullPath.length() == 0) {
+            Gdx.app.debug(TAG, "Map is invalid");
+            return;
+        }
+
+        if (_currentMap != null) {
+            _currentMap.dispose();
+        }
+
+        Utility.loadMapAsset(mapFullPath);
+        if (Utility.isAssetLoaded(mapFullPath)) {
+            _currentMap = Utility.getMapAsset(mapFullPath);
+            _currentMapName = mapName;
+        } else {
+            Gdx.app.debug(TAG, "Map not loaded");
+            return;
+        }
+
+        _collisionLayer = _currentMap.getLayers().get(MAP_COLLISION_LAYER);
+        if (_collisionLayer == null) {
+            Gdx.app.debug(TAG, "No collision layer!");
+        }
+
+        _portalLayer = _currentMap.getLayers().get(MAP_PORTAL_LAYER);
+        if (_portalLayer == null) {
+            Gdx.app.debug(TAG, "No portal layer!");
+        }
+
+        _spawnsLayer = _currentMap.getLayers().get(MAP_SPAWNS_LAYER);
+        if (_spawnsLayer == null) {
+            Gdx.app.debug(TAG, "No spawn layer!");
+        } else {
+            Vector2 start = _playerStartLocationTable.get(_currentMapName);
+            if (start.isZero()) {
+                setClosestStartPosition(_playerStart);
+                start = _playerStartLocationTable.get(_currentMapName);
+            }
+            _playerStart.set(start.x, start.y);
+        }
+        Gdx.app.debug(TAG, "Player Start: (" + _playerStart.x + ", " + _playerStart.y + ")");
+    }
 }
