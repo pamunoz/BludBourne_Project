@@ -136,4 +136,26 @@ public class MapManager {
         playerStart.set(_playerStart.x * UNIT_SCALE, _playerStart.y * UNIT_SCALE);
         return playerStart;
     }
+
+    private void setClosestStartPosition(final Vector2 position) {
+        // Get last known position on this map
+        _playerStartPositionRect.set(0, 0);
+        _closestPlayerStartPosition.set(0, 0);
+        float shortestDistance = 0f;
+
+        // Go through all player start positions and choose closest
+        // to last known position
+        for (MapObject object : _spawnsLayer.getObjects()) {
+            if (object.getName().equalsIgnoreCase(PLAYER_START)) {
+                ((RectangleMapObject)object).getRectangle().getPosition(_playerStartPositionRect);
+                float distance = position.dst2(_playerStartPositionRect);
+
+                if (distance < shortestDistance || shortestDistance == 0) {
+                    _closestPlayerStartPosition.set(_playerStartPositionRect);
+                    shortestDistance = distance;
+                }
+            }
+        }
+        _playerStartLocationTable.put(_currentMapName, _closestPlayerStartPosition.cpy());
+    }
 }
