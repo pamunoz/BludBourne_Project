@@ -147,7 +147,7 @@ public class Entity {
                     case 0:
                         _walkDownFrames.insert(j, region);
                         break;
-                    case 1;
+                    case 1:
                         _walkLeftFrames.insert(j, region);
                         break;
                     case 2:
@@ -214,5 +214,39 @@ public class Entity {
             default:
                 break;
         }
+    }
+
+    public void setNextPositionToCurrent() {
+        setCurrentPosition(_nextPlayerPosition.x, _nextPlayerPosition.y);
+    }
+
+    public void calculateNextPosition(Direction currentDirection, float deltaTime) {
+        float testX = _currentPlayerPosition.x;
+        float testY = _currentPlayerPosition.y;
+
+        _velocity.scl(deltaTime);
+
+        switch (currentDirection) {
+            case LEFT:
+                testX -= _velocity.x;
+                break;
+            case RIGHT:
+                testX += _velocity.x;
+                break;
+            case UP:
+                testY += _velocity.y;
+                break;
+            case DOWN:
+                testY -= _velocity.y;
+                break;
+            default:
+                break;
+        }
+
+        _nextPlayerPosition.x = testX;
+        _nextPlayerPosition.y = testY;
+
+        // velocity
+        _velocity.scl(1 / deltaTime);
     }
 }
