@@ -169,4 +169,50 @@ public class Entity {
     public void dispose() {
         Utility.unloadAsset(_defaultSpritePath);
     }
+
+    public void setState(State state) {
+        this._state = state;
+    }
+
+    public Sprite getFrameSprite() {
+        return _frameSprite;
+    }
+
+    public TextureRegion getFrame() {
+        return _currentFrame;
+    }
+
+    public Vector2 getCurrentPosition() {
+        return _currentPlayerPosition;
+    }
+
+    public void setCurrentPosition(float currentPositionX, float currentPositionY) {
+        _frameSprite.setX(currentPositionX);
+        _frameSprite.setY(currentPositionY);
+        this._currentPlayerPosition.x = currentPositionX;
+        this._currentPlayerPosition.y = currentPositionY;
+    }
+
+    public void setDirection(Direction direction, float deltaTime) {
+        this._previousDirection = this._currentDirection;
+        this._currentDirection = direction;
+
+        // Look into the appropriate variable when changing position
+        switch (_currentDirection) {
+            case DOWN:
+                _currentFrame = _walkDownAnimation.getKeyFrame(_frameTime);
+                break;
+            case LEFT:
+                _currentFrame = _walkLeftAnimation.getKeyFrame(_frameTime);
+                break;
+            case UP:
+                _currentFrame = _walkUpAnimation.getKeyFrame(_frameTime);
+                break;
+            case RIGHT:
+                _currentFrame = _walkRightAnimation.getKeyFrame(_frameTime);
+                break;
+            default:
+                break;
+        }
+    }
 }
