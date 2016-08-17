@@ -114,4 +114,26 @@ public class MapManager {
         }
         Gdx.app.debug(TAG, "Player Start: (" + _playerStart.x + ", " + _playerStart.y + ")");
     }
+
+    public TiledMap getCurrentMap() {
+        if (_currentMap == null) {
+            _currentMapName = TOWN;
+            loadMap(_currentMapName);
+        }
+        return _currentMap;
+    }
+
+    public MapLayer getCollisionLayer() {
+        return _collisionLayer;
+    }
+
+    public MapLayer getPortalLayer() {
+        return _portalLayer;
+    }
+
+    public Vector2 getPlayerStartUnitScaled() {
+        Vector2 playerStart = _playerStart.cpy();
+        playerStart.set(_playerStart.x * UNIT_SCALE, _playerStart.y * UNIT_SCALE);
+        return playerStart;
+    }
 }
