@@ -121,4 +121,11 @@ public class Entity {
         boundingBox.set(minX, minY, width, height);
     }
 
+    private void loadDefaultSprite() {
+        Texture texture = Utility.getTextureAsset(_defaultSpritePath);
+        TextureRegion[][] textureFrames = TextureRegion.split(texture, FRAME_WIDTH, FRAME_HEIGHT);
+        _frameSprite = new Sprite(textureFrames[0][0].getTexture(), 0, 0, FRAME_WIDTH, FRAME_HEIGHT);
+        _currentFrame = textureFrames[0][0];
+    }
+
 }
