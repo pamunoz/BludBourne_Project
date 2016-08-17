@@ -109,5 +109,15 @@ public class PlayerController implements InputProcessor {
         return true;
     }
 
-    
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        // left is selection, right is context menu
+        if (button == Input.Buttons.LEFT) {
+            this.selectMouseButtonReleased(screenX, screenY);
+        }
+        if (button == Input.Buttons.RIGHT) {
+            this.doActionMouseButtonReleased(screenX, screenY);
+        }
+        return true;
+    }
 }
