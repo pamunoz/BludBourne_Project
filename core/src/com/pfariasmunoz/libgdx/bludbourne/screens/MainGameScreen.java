@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -152,5 +153,31 @@ public class MainGameScreen implements Screen {
         Gdx.app.debug(TAG, "WorldRenderer: virtual: (" + VIEWPORT.virtualWidth + ", " + VIEWPORT.virtualHeight + ")");
         Gdx.app.debug(TAG, "WorldRenderer: viewport: (" + VIEWPORT.viewportWidth + ", " + VIEWPORT.viewportHeight + ")");
         Gdx.app.debug(TAG, "WorldRenderer: physical: (" + VIEWPORT.physicalWidth + ", " + VIEWPORT.viewportHeight + ")");
+    }
+
+    private boolean isCollisionWithMapLayer(Rectangle boundingBox) {
+        MapLayer mapCollisionLayer = _mapMgr.getCollisionLayer();
+
+        if (mapCollisionLayer == null) {
+            return false;
+        }
+
+        Rectangle rectangle = null;
+
+        for (MapObject object : mapCollisionLayer.getObjects()) {
+            if (object instanceof RectangleMapObject) {
+                rectangle = ((RectangleMapObject)object).getRectangle();
+                if (boundingBox.overlaps(rectangle)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean updatePortalLayerActivation(Rectangle boundingBox) {
+        MapLayer mapPortalLayer = _mapMgr.getPortalLayer();
+
+        
     }
 }
