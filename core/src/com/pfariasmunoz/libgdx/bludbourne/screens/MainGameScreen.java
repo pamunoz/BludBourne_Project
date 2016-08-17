@@ -98,4 +98,59 @@ public class MainGameScreen implements Screen {
         _mapRenderer.getBatch().draw(_currentPlayerFrame, _currentPlayerSprite.getX(), _currentPlayerSprite.getY(), 1, 1);
         _mapRenderer.getBatch().end();
     }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void dispose() {
+        _player.dispose();
+        _controler.dispose();
+        Gdx.input.setInputProcessor(null);
+        _mapRenderer.dispose();
+    }
+
+    private void setupViewport(int width, int height) {
+        // Make the viewport a percentage of the total display area
+        VIEWPORT.virtualWidth = width;
+        VIEWPORT.virtualHeight = height;
+
+        // Current viewport dimensions
+        VIEWPORT.viewportWidth = VIEWPORT.virtualWidth;
+        VIEWPORT.viewportHeight = VIEWPORT.virtualHeight;
+
+        // pixel dimension of display
+        VIEWPORT.physicalWidth = Gdx.graphics.getWidth();
+        VIEWPORT.physicalHeight = Gdx.graphics.getHeight();
+
+        // aspect ratio for current viewport
+        VIEWPORT.aspectRatio = (VIEWPORT.virtualWidth / VIEWPORT.virtualHeight);
+
+        // update viewport if there could be skewing
+        if (VIEWPORT.physicalWidth / VIEWPORT.physicalHeight >= VIEWPORT.aspectRatio) {
+            // Letterbox left and right
+            VIEWPORT.viewportWidth = VIEWPORT.viewportHeight * (VIEWPORT.physicalWidth / VIEWPORT.physicalHeight);
+            VIEWPORT.viewportHeight = VIEWPORT.virtualHeight;
+        } else {
+            // Letterbox above and below
+            VIEWPORT.viewportWidth = VIEWPORT.virtualWidth;
+            VIEWPORT.viewportHeight = VIEWPORT.viewportWidth * (VIEWPORT.physicalHeight / VIEWPORT.physicalWidth);
+        }
+
+        Gdx.app.debug(TAG, "WorldRenderer: virtual: (" + VIEWPORT.virtualWidth + ", " + VIEWPORT.virtualHeight + ")");
+        Gdx.app.debug(TAG, "WorldRenderer: viewport: (" + VIEWPORT.viewportWidth + ", " + VIEWPORT.viewportHeight + ")");
+        Gdx.app.debug(TAG, "WorldRenderer: physical: (" + VIEWPORT.physicalWidth + ", " + VIEWPORT.viewportHeight + ")");
+    }
 }
