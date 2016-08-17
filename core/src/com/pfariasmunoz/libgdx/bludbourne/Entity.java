@@ -76,11 +76,49 @@ public class Entity {
         setBoundingBoxSize(0f, 0.5f);
     }
 
+    public void init(float startX, float startY) {
+        this._currentPlayerPosition.x = startX;
+        this._currentPlayerPosition.y = startY;
+        this._nextPlayerPosition.x = startX;
+        this._nextPlayerPosition.y = startY;
+    }
 
+    public void setBoundingBoxSize(float percentageWidthReduced, float percentageHeightReduced) {
+        // Update the current bounding box
+        float width;
+        float height;
 
+        float widthReductionAmount = 1.0f - percentageWidthReduced; // .8f for 20% (1 - .20)
+        float heightReductionAmount = 1.0f - percentageHeightReduced; // .8f for 20% (1 - .20)
 
+        if (widthReductionAmount > 0 && widthReductionAmount < 1) {
+            width = FRAME_WIDTH * widthReductionAmount;
+        } else {
+            width = FRAME_WIDTH;
+        }
 
+        if (heightReductionAmount > 0 && heightReductionAmount < 1) {
+            height = FRAME_HEIGHT * heightReductionAmount;
+        } else {
+            height = FRAME_HEIGHT;
+        }
 
+        if (width == 0 || height == 0) {
+            Gdx.app.debug(TAG, "Width and Height are 0!! " + width + ": " + height);
+        }
 
+        // Need to account for the unitscale, since the map coordinates will e in pixels
+        float minX;
+        float minY;
+        if (MapManager.UNIT_SCALE > 0) {
+            minX = _nextPlayerPosition.x / MapManager.UNIT_SCALE;
+            minY = _nextPlayerPosition.y / MapManager.UNIT_SCALE;
+        } else {
+            minX = _nextPlayerPosition.x;
+            minY = _nextPlayerPosition.y;
+        }
+
+        boundingBox.set(minX, minY, width, height);
+    }
 
 }
