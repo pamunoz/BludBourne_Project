@@ -68,7 +68,15 @@ public class Entity {
         loadAllAnimations();
     }
 
-    
+    public void update(float delta) {
+        _frameTime = (_frameTime + delta) % 5;
+        // Want to avoid overflow
+
+        // We want the hitbox to be at the feet for a better feel
+        setBoundingBoxSize(0f, 0.5f);
+    }
+
+
 
 
 
