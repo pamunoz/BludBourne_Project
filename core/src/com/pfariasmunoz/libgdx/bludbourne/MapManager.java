@@ -158,4 +158,13 @@ public class MapManager {
         }
         _playerStartLocationTable.put(_currentMapName, _closestPlayerStartPosition.cpy());
     }
+
+    public void setClosestStartPositionFromScaleUnits(Vector2 position) {
+        if (UNIT_SCALE <= 0) {
+            return;
+        }
+
+        _convertedUnits.set(position.x / UNIT_SCALE, position.y / UNIT_SCALE);
+        setClosestStartPosition(_convertedUnits);
+    }
 }
