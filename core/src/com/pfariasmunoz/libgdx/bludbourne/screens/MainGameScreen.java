@@ -70,6 +70,32 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void hide() {
-        
+
+    }
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        // Preferable to lock and center the _camera to the player's position
+        _camera.position.set(_currentPlayerSprite.getX(), _currentPlayerSprite.getY(), 0f);
+        _camera.update();
+
+        _player.update(delta);
+        _currentPlayerFrame = _player.getFrame();
+
+        updatePortalLayerActivation(_player.boundingBox);
+        if (!isCollisionWithMapLayer(_player.boundingBox)) {
+            _player.setNextPositionToCurrent();
+        }
+        _controler.update(delta);
+
+        _mapRenderer.setView(_camera);
+        _mapRenderer.render();
+
+        _mapRenderer.getBatch().begin();
+        _mapRenderer.getBatch().draw(_currentPlayerFrame, _currentPlayerSprite.getX(), _currentPlayerSprite.getY(), 1, 1);
+        _mapRenderer.getBatch().end();
     }
 }
