@@ -87,4 +87,27 @@ public class PlayerController implements InputProcessor {
         }
         return true;
     }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (button == Input.Buttons.LEFT || button == Input.Buttons.RIGHT) {
+            this.setClickedMouseCoordinates(screenX, screenY);
+        }
+
+        // left is selection, right is context menu
+        if (button == Input.Buttons.LEFT) {
+            this.selectMouseButtonPressed(screenX, screenY);
+        }
+        if (button == Input.Buttons.RIGHT) {
+            this.doActionMouseButtonPressed(screenX, screenY);
+        }
+        return true;
+    }
+
+    
 }
