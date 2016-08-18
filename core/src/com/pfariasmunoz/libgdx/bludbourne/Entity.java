@@ -11,7 +11,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 
+import java.util.ArrayList;
 import java.util.UUID;
 /**
  * Created by Pablo Farias on 17-08-16.
@@ -45,6 +47,16 @@ public class Entity {
     static public EntityConfig getEntityConfig(String configFilePath) {
         Json json = new Json();
         return json.fromJson(EntityConfig.class, Gdx.files.internal(configFilePath));
+    }
+
+    static public Array<EntityConfig> getEntityConfigs(String configFilePath) {
+        Json json = new Json();
+        Array<EntityConfig> configs = new Array<EntityConfig>();
+        ArrayList<JsonValue> list = json.fromJson(ArrayList.class, Gdx.files.internal(configFilePath));
+        for (JsonValue jsonVal : list) {
+            configs.add(json.readValue(EntityConfig.class, jsonVal));
+        }
+        return configs;
     }
 
     public EntityConfig getEntityConfig() {
