@@ -42,8 +42,17 @@ public class Entity {
         _components.add(_graphicsComponent);
     }
 
+    static public EntityConfig getEntityConfig(String configFilePath) {
+        Json json = new Json();
+        return json.fromJson(EntityConfig.class, Gdx.files.internal(configFilePath));
+    }
+
     public EntityConfig getEntityConfig() {
         return _entityConfig;
+    }
+
+    public void setEntityConfig(EntityConfig entityConfig) {
+        this._entityConfig = entityConfig;
     }
 
     public void sendMessage(Component.MESSAGE messageType, String... args) {
@@ -72,8 +81,6 @@ public class Entity {
     public Rectangle getCurrentBoundingBox() {
         return _physicsComponent._boundingBox;
     }
-
-    
 
     public void initEntity() {
         this._entityID = UUID.randomUUID().toString();
