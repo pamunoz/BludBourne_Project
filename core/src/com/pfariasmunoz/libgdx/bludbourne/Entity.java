@@ -1,83 +1,33 @@
 package com.pfariasmunoz.libgdx.bludbourne;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonValue;
-import java.util.ArrayList;
 
 import java.util.UUID;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
-import com.badlogic.gdx.utils.Array;
 /**
  * Created by Pablo Farias on 17-08-16.
  */
 public class Entity {
 
-    private static final String TAG = Entity.class.getSimpleName();
-    private Json _json;
-    private EntityConfig _entityConfig;
-
-
-
-    public static enum Direction {
-        UP,
-        RIGHT,
-        DOWN,
-        LEFT;
-
-        static public Direction getRandomNext() {
-            return Direction.values()[MathUtils.random(Direction.values().length - 1)];
-        }
-        public Direction getOpposite() {
-            if (this == LEFT) {
-                return RIGHT;
-            } else if (this == RIGHT) {
-                return LEFT;
-            } else if (this == UP) {
-                return DOWN;
-            } else {
-                return UP;
-            }
-        }
-    }
-
-    public static enum State {
-        IDLE,
-        WALKING,
-        IMMOBILE; // This should always be last
-
-        static public State getRandomNext() {
-            // Ignore IMMOBILE which should be last state
-            return State.values()[MathUtils.random(State.values().length - 2)];
-        }
-    }
-
-    public static enum AnimationType {
-        WALK_LEFT,
-        WALK_RIGHT,
-        WALK_UP,
-        WALK_DOWN,
-        IDLE,
-        IMMOBILE
-    }
-
     public static final int FRAME_WIDTH = 16;
     public static final int FRAME_HEIGHT = 16;
-
+    private static final String TAG = Entity.class.getSimpleName();
     private static final int MAX_COMPONENTS = 5;
+    private Json _json;
+    private EntityConfig _entityConfig;
     private Array<Component> _components;
     private InputComponent _inputComponent;
     private GraphicsComponent _graphicsComponent;
     private PhysicsComponent _physicsComponent;
-
     public Entity(InputComponent inputComponent, PhysicsComponent physicsComponent, GraphicsComponent graphicsComponent) {
         _entityConfig = new EntityConfig();
         _json = new Json();
@@ -96,7 +46,7 @@ public class Entity {
         return _entityConfig;
     }
 
-    public void sendMessage(Component.MESSAGE messageType, String ... args) {
+    public void sendMessage(Component.MESSAGE messageType, String... args) {
         String fullMessage = messageType.toString();
         for (String string : args) {
             fullMessage += Component.MESSAGE_TOKEN + string;
@@ -105,6 +55,12 @@ public class Entity {
         for (Component component : _components) {
             component.receiveMessage(fullMessage);
         }
+    }
+
+    public void update(MapManager mapMgr, Batch batch, float delta) {
+        _inputComponent.update(this, delta);
+        _physicsComponent.update(this, mapMgr, delta);
+        _graphicsComponent.update(this, mapMgr, batch, delta);
     }
 
     public void initEntity() {
@@ -299,5 +255,48 @@ public class Entity {
 
         // velocity
         _velocity.scl(1 / deltaTime);
+    }
+
+    public static enum Direction {
+        UP,
+        RIGHT,
+        DOWN,
+        LEFT;
+
+        static public Direction getRandomNext() {
+            return Direction.values()[MathUtils.random(Direction.values().length - 1)];
+        }
+
+        public Direction getOpposite() {
+            if (this == LEFT) {
+                return RIGHT;
+            } else if (this == RIGHT) {
+                return LEFT;
+            } else if (this == UP) {
+                return DOWN;
+            } else {
+                return UP;
+            }
+        }
+    }
+
+    public static enum State {
+        IDLE,
+        WALKING,
+        IMMOBILE; // This should always be last
+
+        static public State getRandomNext() {
+            // Ignore IMMOBILE which should be last state
+            return State.values()[MathUtils.random(State.values().length - 2)];
+        }
+    }
+
+    public static enum AnimationType {
+        WALK_LEFT,
+        WALK_RIGHT,
+        WALK_UP,
+        WALK_DOWN,
+        IDLE,
+        IMMOBILE
     }
 }
