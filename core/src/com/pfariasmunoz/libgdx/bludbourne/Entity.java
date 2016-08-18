@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.Array;
 public class Entity {
 
     private static final String TAG = Entity.class.getSimpleName();
-    private static final String _defaultSpritePath = "Sprites/characters/Warrior.png";
+    private static final String _defaultSpritePath = "sprites/characters/Warrior.png";
 
     private Vector2 _velocity;
     private String _entityID;
@@ -45,11 +45,11 @@ public class Entity {
     public static Rectangle boundingBox;
 
     public enum State {
-        IDLE, WALKING;
+        IDLE, WALKING
     }
 
     public enum Direction {
-        UP, RIGHT, DOWN, LEFT;
+        UP, RIGHT, DOWN, LEFT
     }
 
     public Entity() {
