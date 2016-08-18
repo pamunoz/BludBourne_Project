@@ -63,6 +63,18 @@ public class Entity {
         _graphicsComponent.update(this, mapMgr, batch, delta);
     }
 
+    public void dispose() {
+        for (Component component : _components) {
+            component.dispose();
+        }
+    }
+
+    public Rectangle getCurrentBoundingBox() {
+        return _physicsComponent._boundingBox;
+    }
+
+    
+
     public void initEntity() {
         this._entityID = UUID.randomUUID().toString();
         this._nextPlayerPosition = new Vector2();
